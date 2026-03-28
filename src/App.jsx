@@ -1,8 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Navbar';
-
-// Pages (we'll create these next)
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -11,7 +9,7 @@ import VehicleDetail from './pages/VehicleDetail';
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div style={{ minHeight: '100vh', background: '#f1f5f9' }}>
       <Navbar />
       <Routes>
         {/* Public */}

@@ -11,24 +11,21 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-blue-700 text-white px-6 py-4 flex justify-between items-center shadow">
-      <Link to="/" className="text-xl font-bold">🚗 VehicleMS</Link>
-      <div className="flex gap-4 items-center">
-        <Link to="/" className="hover:underline">Home</Link>
+    <nav className="navbar">
+      <Link to="/" className="navbar-brand">🚗 VehicleMS</Link>
+      <div className="navbar-links">
+        <Link to="/">Home</Link>
         {isAuthenticated ? (
           <>
-            <Link to="/dashboard" className="hover:underline">Dashboard</Link>
-            <Link to="/vehicle/new" className="hover:underline">Register Vehicle</Link>
-            <button
-              onClick={handleLogout}
-              className="bg-white text-blue-700 px-3 py-1 rounded font-semibold hover:bg-gray-100"
-            >
+            <Link to="/dashboard">Dashboard</Link>
+            <Link to="/vehicle/new">Register Vehicle</Link>
+            <button onClick={handleLogout} className="btn btn-white">
               Logout
             </button>
           </>
         ) : (
-          <Link to="/login" className="bg-white text-blue-700 px-3 py-1 rounded font-semibold hover:bg-gray-100">
-            Login
+          <Link to="/login">
+            <button className="btn btn-white">Login</button>
           </Link>
         )}
       </div>
