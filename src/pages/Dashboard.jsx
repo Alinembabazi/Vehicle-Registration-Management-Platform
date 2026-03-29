@@ -26,7 +26,7 @@ export default function Dashboard() {
           <p className="text-gray-500 mt-1">Manage all registered vehicles</p>
         </div>
         <Link to="/vehicle/new">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow transition-colors cursor-pointer">
+          <button className="bg-blue-950  text-white font-semibold py-2 px-4 rounded-lg shadow transition-colors cursor-pointer">
             + Register Vehicle
           </button>
         </Link>
@@ -34,27 +34,27 @@ export default function Dashboard() {
 
       {isLoading ? (
         <div className="flex justify-center py-20 text-gray-500 font-medium text-lg animate-pulse">
-          ⏳ Loading...
+           Loading...
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 border-b-4 border-b-blue-500 hover:-translate-y-1 transition-transform">
-            <div className="text-4xl mb-3">🚗</div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 border-b-4 border-b-blue-950 hover:-translate-y-1 transition-transform">
+            <div className="text-4xl mb-3"></div>
             <div className="text-3xl font-bold text-gray-900">{total}</div>
             <div className="text-sm font-medium text-gray-500 mt-1">Total Vehicles</div>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 border-b-4 border-b-emerald-500 hover:-translate-y-1 transition-transform">
-            <div className="text-4xl mb-3">✅</div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 border-b-4 border-b-blue-950 hover:-translate-y-1 transition-transform">
+            <div className="text-4xl mb-3"></div>
             <div className="text-3xl font-bold text-gray-900">{newVehicles}</div>
             <div className="text-sm font-medium text-gray-500 mt-1">New Vehicles</div>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 border-b-4 border-b-amber-500 hover:-translate-y-1 transition-transform">
-            <div className="text-4xl mb-3">🔄</div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 border-b-4 border-b-blue-950 hover:-translate-y-1 transition-transform">
+            <div className="text-4xl mb-3"></div>
             <div className="text-3xl font-bold text-gray-900">{usedVehicles}</div>
             <div className="text-sm font-medium text-gray-500 mt-1">Used Vehicles</div>
           </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 border-b-4 border-b-slate-500 hover:-translate-y-1 transition-transform">
-            <div className="text-4xl mb-3">🔧</div>
+          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 border-b-4 border-b-blue-950 hover:-translate-y-1 transition-transform">
+            <div className="text-4xl mb-3"></div>
             <div className="text-3xl font-bold text-gray-900">{rebuilt}</div>
             <div className="text-sm font-medium text-gray-500 mt-1">Rebuilt</div>
           </div>
@@ -91,7 +91,7 @@ export default function Dashboard() {
                     <td className="px-6 py-4 text-gray-700">{vehicle.model}</td>
                     <td className="px-6 py-4 text-gray-700">{vehicle.year}</td>
                     <td className="px-6 py-4">
-                      <span className="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full">{vehicle.vehicleType}</span>
+                      <span className="bg-blue-100 text-blue-950 text-xs font-bold px-2.5 py-1 rounded-full">{vehicle.vehicleType}</span>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${
