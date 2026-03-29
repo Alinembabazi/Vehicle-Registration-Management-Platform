@@ -25,7 +25,7 @@ export default function Home() {
 
       {isError && (
         <div className="alert alert-error">
-          ❌ Failed to load vehicles: {error.message}
+          ❌ Error: {error?.response?.data?.message || error.message}
         </div>
       )}
 

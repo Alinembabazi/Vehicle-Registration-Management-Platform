@@ -28,8 +28,8 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="bg-white p-8 rounded-xl shadow-md w-full max-w-md border border-gray-200">
         
         {/* Header */}
         <div className="text-center mb-6">
@@ -39,7 +39,7 @@ export default function Login() {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm">
+          <div className="bg-red-100 text-red-700 px-4 py-3 rounded mb-4 text-sm font-medium">
             ❌ {error}
           </div>
         )}
@@ -47,7 +47,6 @@ export default function Login() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           
-          {/* Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email Address
@@ -58,11 +57,10 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="test@gmail.com"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
@@ -73,25 +71,23 @@ export default function Login() {
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
             />
           </div>
 
-          {/* Submit Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-700 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition disabled:opacity-50"
+            className="w-full bg-blue-700 text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition-colors disabled:opacity-50 mt-2"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>
-
         </form>
 
         {/* Hint */}
-        <div className="mt-6 bg-gray-50 rounded-lg p-3 text-sm text-gray-500 text-center">
+        <div className="mt-6 bg-gray-50 rounded-lg p-3 text-sm text-gray-500 text-center border border-gray-100">
           <p>Demo credentials:</p>
-          <p className="font-mono">test@gmail.com / Password!234</p>
+          <p className="font-mono font-bold text-gray-700">test@gmail.com / Password!234</p>
         </div>
 
       </div>

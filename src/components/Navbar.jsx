@@ -11,17 +11,17 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-blue-700 text-white px-6 py-4 flex justify-between items-center shadow">
-      <Link to="/" className="text-xl font-bold">🚗 VehicleMS</Link>
-      <div className="flex gap-4 items-center">
-        <Link to="/" className="hover:underline">Home</Link>
+    <nav className="bg-blue-700 text-white px-6 py-4 flex justify-between items-center shadow-lg sticky top-0 z-50">
+      <Link to="/" className="text-xl font-bold flex items-center gap-2 hover:scale-105 transition-transform">🚗 VehicleMS</Link>
+      <div className="flex gap-6 items-center">
+        <Link to="/" className="text-blue-100 hover:text-white font-medium transition-colors">Home</Link>
         {isAuthenticated ? (
           <>
-            <Link to="/dashboard" className="hover:underline">Dashboard</Link>
-            <Link to="/vehicle/new" className="hover:underline">Register Vehicle</Link>
+            <Link to="/dashboard" className="text-blue-100 hover:text-white font-medium transition-colors">Dashboard</Link>
+            <Link to="/vehicle/new" className="text-blue-100 hover:text-white font-medium transition-colors">Register Vehicle</Link>
             <button
               onClick={handleLogout}
-              className="bg-white text-blue-700 px-3 py-1 rounded font-semibold hover:bg-gray-100"
+              className="bg-white text-blue-700 px-4 py-1.5 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
             >
               Logout
             </button>
@@ -29,7 +29,7 @@ export default function Navbar() {
         ) : (
           <Link
             to="/login"
-            className="bg-white text-blue-700 px-3 py-1 rounded font-semibold hover:bg-gray-100"
+            className="bg-white text-blue-700 px-4 py-1.5 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
           >
             Login
           </Link>
