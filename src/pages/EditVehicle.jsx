@@ -9,40 +9,42 @@ const { id } = useParams();
 const navigate = useNavigate();
 const queryClient = useQueryClient();
 
-const [form, setForm] = useState({
+const [draft, setDraft] = useState(null);
+
+const emptyForm = {
   manufacture: "",
   model: "",
   year: "",
   plateNumber: "",
   ownerName: "",
   mobile: "",
-});
+};
 
-const { isLoading, error } = useQuery({
+const { data, isLoading, error } = useQuery({
   queryKey: ["vehicle", id],
   queryFn: () => getVehicleById(id),
-  onSuccess: (data) => {
-    if (data) {
-      setForm({
-        manufacture: data.manufacture || "",
-        model: data.model || "",
-        year: data.year || "",
-        plateNumber: data.plateNumber || "",
-        ownerName: data.ownerName || "",
-        mobile: data.mobile || "",
-      });
-    }
-  },
 });
+
+const form = draft ?? (data
+  ? {
+      manufacture: data.manufacture || "",
+      model: data.model || "",
+      year: data.year?.toString() || "",
+      plateNumber: data.plateNumber || "",
+      ownerName: data.ownerName || "",
+      mobile: data.mobile || "",
+    }
+  : emptyForm);
 
 const mutation = useMutation({
   mutationFn: (payload) => updateVehicle(id, payload),
   onSuccess: () => {
-    queryClient.invalidateQueries(["vehicles"]);
+    queryClient.invalidateQueries({ queryKey: ["vehicles"] });
+    queryClient.invalidateQueries({ queryKey: ["vehicle", id] });
     toast.success("Vehicle updated!");
     navigate(`/vehicle/${id}`);
   },
-  onError: (err) => toast.error(err.response?.data?.message || "Update failed"),
+  onError: (err) => toast.error(err.message || "Update failed"),
 });
 
 const handleSubmit = (e) => {
@@ -61,7 +63,7 @@ return (
         type="text"
         placeholder="Manufacture"
         value={form.manufacture}
-        onChange={(e) => setForm({ ...form, manufacture: e.target.value })}
+        onChange={(e) => setDraft({ ...form, manufacture: e.target.value })}
         className="border p-2 w-full"
         required
       />
@@ -69,7 +71,7 @@ return (
         type="text"
         placeholder="Model"
         value={form.model}
-        onChange={(e) => setForm({ ...form, model: e.target.value })}
+        onChange={(e) => setDraft({ ...form, model: e.target.value })}
         className="border p-2 w-full"
         required
       />
@@ -77,7 +79,7 @@ return (
         type="number"
         placeholder="Year"
         value={form.year}
-        onChange={(e) => setForm({ ...form, year: e.target.value })}
+        onChange={(e) => setDraft({ ...form, year: e.target.value })}
         className="border p-2 w-full"
         required
       />
@@ -85,7 +87,7 @@ return (
         type="text"
         placeholder="Plate Number"
         value={form.plateNumber}
-        onChange={(e) => setForm({ ...form, plateNumber: e.target.value })}
+        onChange={(e) => setDraft({ ...form, plateNumber: e.target.value })}
         className="border p-2 w-full"
         required
       />
@@ -93,7 +95,7 @@ return (
         type="text"
         placeholder="Owner Name"
         value={form.ownerName}
-        onChange={(e) => setForm({ ...form, ownerName: e.target.value })}
+        onChange={(e) => setDraft({ ...form, ownerName: e.target.value })}
         className="border p-2 w-full"
         required
       />
@@ -101,7 +103,7 @@ return (
         type="text"
         placeholder="Mobile"
         value={form.mobile}
-        onChange={(e) => setForm({ ...form, mobile: e.target.value })}
+        onChange={(e) => setDraft({ ...form, mobile: e.target.value })}
         className="border p-2 w-full"
         required
       />
@@ -116,10 +118,10 @@ return (
         </button>
         <button
           type="submit"
-          disabled={mutation.isLoading}
+          disabled={mutation.isPending}
           className="px-4 py-2 bg-blue-950 text-white rounded"
         >
-          {mutation.isLoading ? "Saving..." : "Update Vehicle"}
+          {mutation.isPending ? "Saving..." : "Update Vehicle"}
         </button>
       </div>
     </form>

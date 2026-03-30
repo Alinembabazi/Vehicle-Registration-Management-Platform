@@ -43,25 +43,6 @@ const INITIAL_STATE = {
   proofOfOwnership: ""
 };
 
-const toNumber = (value, fallback) => {
-  const parsed = Number.parseInt(value, 10);
-  return Number.isFinite(parsed) ? parsed : fallback;
-};
-
-const addYears = (dateString, yearsToAdd) => {
-  const date = dateString ? new Date(dateString) : new Date();
-  date.setFullYear(date.getFullYear() + yearsToAdd);
-  return date.toISOString();
-};
-
-const toISO = (value, fallback) => {
-  if (value) {
-    return new Date(value).toISOString();
-  }
-
-  return fallback;
-};
-
 const Field = ({ label, name, type = "text", options = [], value, onChange }) => (
   <div className="flex flex-col gap-1.5 mb-2">
     <label className="text-sm font-semibold text-gray-700">{label}</label>
@@ -119,52 +100,7 @@ export default function RegisterVehicle() {
 
     if (step !== STEPS.length - 1) return next();
 
-    const id = Date.now().toString();
-    const registrationDate = toISO(formData.registrationDate, new Date().toISOString());
-    const expiryDate = toISO(formData.expiryDate, addYears(formData.registrationDate, 1));
-    const insuranceExpiryDate = toISO(
-      formData.insuranceExpiryDate,
-      addYears(formData.registrationDate, 1)
-    );
-
-    const payload = {
-      manufacture: formData.manufacture || "Toyota",
-      model: formData.model || "Corolla",
-      color: formData.color || "White",
-      year: toNumber(formData.year, 2024),
-      engineCapacity: toNumber(formData.engineCapacity, 1800),
-      seatingCapacity: toNumber(formData.seatingCapacity, 5),
-      odometerReading: toNumber(formData.odometerReading, 10000),
-      vehicleType: formData.vehicleType,
-      bodyType: formData.bodyType,
-      fuelType: formData.fuelType,
-      vehiclePurpose: formData.vehiclePurpose,
-      vehicleStatus: formData.vehicleStatus,
-      state: formData.state || "Kigali",
-      plateNumber: formData.plateNumber || `RAE ${id.slice(-3)} A`,
-      plateType: formData.plateType,
-      ownerName: formData.ownerName || "Test Owner",
-      ownerType: formData.ownerType,
-      email: formData.email || `user${id}@example.com`,
-      mobile: formData.mobile || "0780000000",
-      address: formData.address || "KG 123 St, Kigali",
-      nationalId: formData.nationalId || id.padEnd(16, "0").slice(0, 16),
-      passportNumber: formData.passportNumber || `PC${id.slice(-7)}`,
-      companyRegNumber: formData.companyRegNumber || `RWA/2026/${id.slice(-5)}`,
-      roadworthyCert: formData.roadworthyCert || `RWC-${id.slice(-6)}`,
-      customsRef: formData.customsRef || `CUS-RW-${id.slice(-6)}`,
-      proofOfOwnership: formData.proofOfOwnership || `LOG-BOOK-${id.slice(-6)}`,
-      policyNumber: formData.policyNumber || `POL-${id.slice(-6)}`,
-      companyName: formData.companyName || "SANLAM Insurance Rwanda",
-      insuranceType: formData.insuranceType,
-      insuranceStatus: formData.insuranceStatus,
-      registrationStatus: formData.registrationStatus,
-      registrationDate,
-      expiryDate,
-      insuranceExpiryDate
-    };
-
-    mutate(payload);
+    mutate(formData);
   };
 
   return (

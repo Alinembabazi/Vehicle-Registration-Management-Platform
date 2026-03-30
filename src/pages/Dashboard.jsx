@@ -115,11 +115,18 @@ return (
                   </td>
 
                   <td className="px-6 py-4">
-                    <Link to={`/vehicle/${vehicle.id}`}>
-                      <button className="border px-3 py-1 rounded text-sm hover:bg-gray-100">
-                        View
-                      </button>
-                    </Link>
+                    <div className="flex gap-2">
+                      <Link to={`/vehicle/${vehicle.id}`}>
+                        <button className="border px-3 py-1 rounded text-sm hover:bg-gray-100">
+                          View
+                        </button>
+                      </Link>
+                      <Link to={`/vehicle/${vehicle.id}/edit`}>
+                        <button className="border px-3 py-1 rounded text-sm hover:bg-gray-100">
+                          Edit
+                        </button>
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))
