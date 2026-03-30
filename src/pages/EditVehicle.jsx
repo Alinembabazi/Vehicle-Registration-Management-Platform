@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { getVehicleById, updateVehicle } from "../services/api"; // ✅ named imports
+import { getVehicleById, updateVehicle } from "../services/api";
 
 function EditVehicle() {
 const { id } = useParams();

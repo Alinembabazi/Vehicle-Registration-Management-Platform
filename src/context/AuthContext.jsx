@@ -1,27 +1,29 @@
-import { createContext, useContext, useState } from 'react';
+import { useState } from "react";
+import AuthContext from "./auth-context";
 
-const VALID_EMAIL = 'test@gmail.com';
-const VALID_PASSWORD = 'Password!234';
-
-const AuthContext = createContext(null);
+const VALID_EMAIL = "test@gmail.com";
+const VALID_PASSWORD = "Password!234";
 
 export function AuthProvider({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(
-    () => localStorage.getItem('isLoggedIn') === 'true'
+    () =>
+      typeof window !== "undefined" &&
+      window.localStorage.getItem("isLoggedIn") === "true"
   );
 
   const login = (email, password) => {
     if (email === VALID_EMAIL && password === VALID_PASSWORD) {
       setIsAuthenticated(true);
-      localStorage.setItem('isLoggedIn', 'true');
+      window.localStorage.setItem("isLoggedIn", "true");
       return { success: true };
+    } else {
+      return { success: false, message: "Invalid credentials" };
     }
-    return { success: false, message: 'Invalid credentials' };
   };
 
   const logout = () => {
     setIsAuthenticated(false);
-    localStorage.removeItem('isLoggedIn');
+    window.localStorage.removeItem("isLoggedIn");
   };
 
   return (
@@ -29,8 +31,4 @@ export function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-}
-
-export function useAuth() {
-  return useContext(AuthContext);
 }

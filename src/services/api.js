@@ -2,6 +2,33 @@ import axios from "axios";
 
 const BASE_URL = "https://student-management-system-backend.up.railway.app/api/vehicle-service";
 
+const getApiError = (error) => {
+  const data = error.response?.data;
+  const status = error.response?.status;
+
+  const prefix = status ? `Request failed (${status})` : "Request failed";
+
+  if (typeof data === "string" && data.trim()) {
+    return new Error(`${prefix}: ${data}`);
+  }
+
+  if (data?.message) {
+    return new Error(`${prefix}: ${data.message}`);
+  }
+
+  if (Array.isArray(data?.errors) && data.errors.length > 0) {
+    return new Error(
+      `${prefix}: ${data.errors.map((item) => item.message || item).join(", ")}`
+    );
+  }
+
+  if (data && typeof data === "object") {
+    return new Error(`${prefix}: ${JSON.stringify(data)}`);
+  }
+
+  return new Error(error.message || prefix);
+};
+
 export const getVehicles = async () => {
   try {
     const response = await axios.get(`${BASE_URL}/vehicle`, {
@@ -11,7 +38,7 @@ export const getVehicles = async () => {
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || error.message;
+    throw getApiError(error);
   }
 };
 
@@ -20,7 +47,7 @@ export const getVehicleById = async (id) => {
     const response = await axios.get(`${BASE_URL}/vehicle/${id}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || error.message;
+    throw getApiError(error);
   }
 };
 
@@ -33,7 +60,7 @@ export const createVehicle = async (data) => {
     });
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || error.message;
+    throw getApiError(error);
   }
 };
 
@@ -42,7 +69,7 @@ export const updateVehicle = async (id, data) => {
     const response = await axios.put(`${BASE_URL}/vehicle/${id}`, data);
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || error.message;
+    throw getApiError(error);
   }
 };
 
@@ -52,7 +79,7 @@ export const deleteVehicle = async (id) => {
     const response = await axios.delete(`${BASE_URL}/vehicle/${id}`);
     return response.data;
   } catch (error) {
-    throw error.response?.data?.message || error.message;
+    throw getApiError(error);
   }
 };
 export const getVehicleByTab = async (id, tab) => {
@@ -113,6 +140,6 @@ export const getVehicleByTab = async (id, tab) => {
         return vehicle;
     }
   } catch (error) {
-    throw error.response?.data?.message || error.message;
+    throw getApiError(error);
   }
 };

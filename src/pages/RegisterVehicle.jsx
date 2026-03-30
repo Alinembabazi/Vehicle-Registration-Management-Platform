@@ -43,6 +43,25 @@ const INITIAL_STATE = {
   proofOfOwnership: ""
 };
 
+const toNumber = (value, fallback) => {
+  const parsed = Number.parseInt(value, 10);
+  return Number.isFinite(parsed) ? parsed : fallback;
+};
+
+const addYears = (dateString, yearsToAdd) => {
+  const date = dateString ? new Date(dateString) : new Date();
+  date.setFullYear(date.getFullYear() + yearsToAdd);
+  return date.toISOString();
+};
+
+const toISO = (value, fallback) => {
+  if (value) {
+    return new Date(value).toISOString();
+  }
+
+  return fallback;
+};
+
 const Field = ({ label, name, type = "text", options = [], value, onChange }) => (
   <div className="flex flex-col gap-1.5 mb-2">
     <label className="text-sm font-semibold text-gray-700">{label}</label>
@@ -82,12 +101,11 @@ export default function RegisterVehicle() {
   const { mutate, isPending } = useMutation({
     mutationFn: createVehicle,
     onSuccess: () => {
-      queryClient.invalidateQueries(["vehicles"]);
+      queryClient.invalidateQueries({ queryKey: ["vehicles"] });
       toast.success("Vehicle registered!");
       navigate("/dashboard");
     },
-    onError: (err) =>
-      toast.error(err.response?.data?.message || "Registration failed")
+    onError: (err) => toast.error(err.message || "Registration failed")
   });
 
   const handleChange = (e) =>
@@ -96,40 +114,54 @@ export default function RegisterVehicle() {
   const next = () => step < STEPS.length - 1 && setStep(step + 1);
   const prev = () => step > 0 && setStep(step - 1);
 
-  const toISO = (d) => (d ? new Date(d).toISOString() : new Date().toISOString());
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (step !== STEPS.length - 1) return next();
 
     const id = Date.now().toString();
+    const registrationDate = toISO(formData.registrationDate, new Date().toISOString());
+    const expiryDate = toISO(formData.expiryDate, addYears(formData.registrationDate, 1));
+    const insuranceExpiryDate = toISO(
+      formData.insuranceExpiryDate,
+      addYears(formData.registrationDate, 1)
+    );
 
     const payload = {
-      ...formData,
       manufacture: formData.manufacture || "Toyota",
       model: formData.model || "Corolla",
       color: formData.color || "White",
-      year: parseInt(formData.year, 10) || 2024,
-      engineCapacity: parseInt(formData.engineCapacity, 10) || 1800,
-      seatingCapacity: parseInt(formData.seatingCapacity, 10) || 5,
-      odometerReading: parseInt(formData.odometerReading, 10) || 10000,
-      plateNumber: formData.plateNumber || "RAE " + id.slice(-3) + " A",
+      year: toNumber(formData.year, 2024),
+      engineCapacity: toNumber(formData.engineCapacity, 1800),
+      seatingCapacity: toNumber(formData.seatingCapacity, 5),
+      odometerReading: toNumber(formData.odometerReading, 10000),
+      vehicleType: formData.vehicleType,
+      bodyType: formData.bodyType,
+      fuelType: formData.fuelType,
+      vehiclePurpose: formData.vehiclePurpose,
+      vehicleStatus: formData.vehicleStatus,
+      state: formData.state || "Kigali",
+      plateNumber: formData.plateNumber || `RAE ${id.slice(-3)} A`,
+      plateType: formData.plateType,
       ownerName: formData.ownerName || "Test Owner",
+      ownerType: formData.ownerType,
       email: formData.email || `user${id}@example.com`,
       mobile: formData.mobile || "0780000000",
       address: formData.address || "KG 123 St, Kigali",
       nationalId: formData.nationalId || id.padEnd(16, "0").slice(0, 16),
-      passportNumber: formData.passportNumber || "P" + id.slice(-7),
-      companyRegNumber: formData.companyRegNumber || "RWA/" + id.slice(-6),
-      roadworthyCert: formData.roadworthyCert || "RWC-" + id.slice(-6),
-      customsRef: formData.customsRef || "CUS-" + id.slice(-6),
-      proofOfOwnership: formData.proofOfOwnership || "LOG-" + id.slice(-6),
-      policyNumber: formData.policyNumber || "POL-" + id.slice(-6),
-      companyName: formData.companyName || "SANLAM",
-      registrationDate: toISO(formData.registrationDate),
-      expiryDate: toISO(formData.expiryDate),
-      insuranceExpiryDate: toISO(formData.insuranceExpiryDate)
+      passportNumber: formData.passportNumber || `PC${id.slice(-7)}`,
+      companyRegNumber: formData.companyRegNumber || `RWA/2026/${id.slice(-5)}`,
+      roadworthyCert: formData.roadworthyCert || `RWC-${id.slice(-6)}`,
+      customsRef: formData.customsRef || `CUS-RW-${id.slice(-6)}`,
+      proofOfOwnership: formData.proofOfOwnership || `LOG-BOOK-${id.slice(-6)}`,
+      policyNumber: formData.policyNumber || `POL-${id.slice(-6)}`,
+      companyName: formData.companyName || "SANLAM Insurance Rwanda",
+      insuranceType: formData.insuranceType,
+      insuranceStatus: formData.insuranceStatus,
+      registrationStatus: formData.registrationStatus,
+      registrationDate,
+      expiryDate,
+      insuranceExpiryDate
     };
 
     mutate(payload);
