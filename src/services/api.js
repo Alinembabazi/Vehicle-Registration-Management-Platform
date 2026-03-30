@@ -1,73 +1,118 @@
-// import axios from 'axios';
-
-// const api = axios.create({
-//   baseURL: 'https://student-management-system-backend.up.railway.app/api/vehicle-service',
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-// });
-
-// // Log requests and responses for debugging
-// api.interceptors.request.use(request => {
-//   console.log(' Request:', request.method.toUpperCase(), request.url);
-//   return request;
-// });
-
-// api.interceptors.response.use(
-//   response => {
-//     console.log('Response:', response.status, response.data);
-//     return response;
-//   },
-//   error => {
-//     console.error('Error:', error.response?.status, error.response?.data);
-//     return Promise.reject(error);
-//   }
-// );
-
-// export default api;
-
-
 import axios from "axios";
 
-// ✅ Create Axios instance
-const api = axios.create({
-  baseURL: "https://student-management-system-backend.up.railway.app/api/vehicle-service",
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
+const BASE_URL = "https://student-management-system-backend.up.railway.app/api/vehicle-service";
 
-// ✅ Log every request
-api.interceptors.request.use(
-  (request) => {
-    console.log(
-      "📤 Request:",
-      request.method?.toUpperCase(),
-      request.baseURL + request.url
-    );
-    return request;
-  },
-  (error) => {
-    console.error("❌ Request Error:", error);
-    return Promise.reject(error);
+export const getVehicles = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/vehicle`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
   }
-);
+};
 
-// ✅ Log every response
-api.interceptors.response.use(
-  (response) => {
-    console.log("📥 Response:", response.status, response.data);
-    return response;
-  },
-  (error) => {
-    console.error(
-      "❌ API Error:",
-      error.response?.status,
-      error.response?.data || error.message
-    );
-
-    return Promise.reject(error);
+export const getVehicleById = async (id) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/vehicle/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
   }
-);
+};
 
-export default api;
+export const createVehicle = async (data) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/vehicle`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+export const updateVehicle = async (id, data) => {
+  try {
+    const response = await axios.put(`${BASE_URL}/vehicle/${id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+
+// DELETE vehicle
+export const deleteVehicle = async (id) => {
+  try {
+    const response = await axios.delete(`${BASE_URL}/vehicle/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
+export const getVehicleByTab = async (id, tab) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/vehicle/${id}`, {
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const vehicle = response.data;
+
+    switch (tab) {
+      case "info":
+        return {
+          manufacture: vehicle.manufacture,
+          model: vehicle.model,
+          year: vehicle.year,
+          vehicleType: vehicle.vehicleType,
+          fuelType: vehicle.fuelType,
+          bodyType: vehicle.bodyType,
+          color: vehicle.color,
+          engineCapacity: vehicle.engineCapacity,
+          seatingCapacity: vehicle.seatingCapacity,
+          odometerReading: vehicle.odometerReading,
+          purpose: vehicle.vehiclePurpose,
+          status: vehicle.vehicleStatus,
+        };
+      case "owner":
+        return {
+          ownerName: vehicle.ownerName,
+          ownerType: vehicle.ownerType,
+          nationalId: vehicle.nationalId,
+          passportNumber: vehicle.passportNumber,
+          companyRegNumber: vehicle.companyRegNumber,
+          mobile: vehicle.mobile,
+          email: vehicle.email,
+          address: vehicle.address,
+        };
+      case "registration":
+        return {
+          plateNumber: vehicle.plateNumber,
+          plateType: vehicle.plateType,
+          registrationDate: vehicle.registrationDate,
+          expiryDate: vehicle.expiryDate,
+          registrationStatus: vehicle.registrationStatus,
+          roadworthyCert: vehicle.roadworthyCert,
+          proofOfOwnership: vehicle.proofOfOwnership,
+          customsRef: vehicle.customsRef,
+        };
+      case "insurance":
+        return {
+          policyNumber: vehicle.policyNumber,
+          companyName: vehicle.companyName,
+          insuranceType: vehicle.insuranceType,
+          insuranceStatus: vehicle.insuranceStatus,
+          insuranceExpiryDate: vehicle.insuranceExpiryDate,
+        };
+      default:
+        return vehicle;
+    }
+  } catch (error) {
+    throw error.response?.data?.message || error.message;
+  }
+};
